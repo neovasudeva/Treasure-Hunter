@@ -1,3 +1,5 @@
+(ns adventure.core)
+
 (def sample-adventurer-state {
 	:type		:life
 	;;
@@ -52,6 +54,7 @@
 ;; => You are in the room. This is a small room.
 ;;
 
+(comment
 (defn status
 	"Get the status of the adventurer"
 	[state]
@@ -79,7 +82,11 @@
 						(str "You are currently in " name "." (describe dir) (describe items)))
 						  
 			:item	(let [item (get-in [])])
-			"Want to find something?")))
-	
+			"Want to find something?")))	
+)
 
+(defn main
+	"lol"
+	[]
+	(println "lol"))
 
