@@ -11,5 +11,6 @@
             [lein-midje "3.2.1"]
           ]
   :repl-options {:init-ns adventure.core}
+  :main ^:skip-aot adventure.core/main
   )
 
