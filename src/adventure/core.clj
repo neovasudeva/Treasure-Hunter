@@ -112,23 +112,88 @@
 ;;
 ;; PURPOSE
 ;; allows the player to take an item from the room
+;; returns [new state, string indicating player took object]
 (defn take
 	"Take an item from a place"
 	[state item]
-	(let [loc (get-in state [:adventurer :location])
-		  name (get-in state [:adventurer :items item :name])
-		  state-grab-item (assoc-in state [:adventurer :inventory] item)
-		  state-delete-item (update-in state [:map loc :contents] dissoc item)]
-		(vector state-delete-item (str "Yes, you picked up " name "."))))
+	(let [room-key (get-in state [:adventurer :location])
+		  room (get-in state [:map room-key])]
+		(if (contains? (:contents room) item)
+			(let [mid-state (update-in state [:map room-key :contents] disj item)]
+				[(update-in mid-state [:adventurer :inventory] conj item)
+					(str "You took the " (name item) ".")]
+			)
+			[state "That doesn't exist in this room."]	
+		)
+	)
+)
 
+;; HELPERS
+(defn curr-room
+	"Return the keyword of current room."
+	[state]
+	(get-in state [:adventurer :location]))
+
+(defn has-item
+	"Check whether the adventurer owns the item."
+	[state item]
+	(if (contains? (get-in state [:adventurer :inventory]) item)
+		true
+		false))
+
+(defn there-is-item
+	"Check whether there is an item right in the room."
+	[state item]
+	(if (contains? (get-in state [:map (curr-room state) :contents]) item)
+		true
+		false))
+
+(defn valid-item
+	"Check whether the item exists in the game."
+	[state item]
+	(if (contains? (:items state) item)
+		true
+		false))
+
+(defn add-to-inventory
+	[state item]
+	(if (valid-item state item)
+		(update-in state [:adventurer :inventory] #(merge % item))
+		(vector state "You can't add a nonexistent item!")))			
+		;; This is expected to never happen.
+
+(defn remove-from-inventory
+	[state item]
+	(if (has-item state item)
+		(update-in state [:adventurer :inventory] disj item)
+		(vector state "You don't have the item!")))						
+		;; This is expected to never happen.
+
+(defn drop-to-room
+	[state item]
+	(let [curr (curr-room state)]
+		(if (has-item state item)
+			(update-in state [:map curr :contents] #(merge % item))
+			(vector state "You can't drop an item you don't own."))))	
+			;; This is expected to never happen.
+
+(defn pick-from-room
+	[state item]
+	(let [curr (curr-room state)]
+		(if (there-is-item state item)
+			(update-in state [:map curr :contents] disj item))
+			(vector state "You can't pick up an item that is not in the room!")))
+
+;; drop 
+;; 
+;; PURPOSE
+;; allow player to drop item into a room
+;; returns [new state, string indicating the drop]
 (defn drop
 	"Drop an item from your inventory. Maybe you need it no more or it's too heavy to carry"
 	[state item]
-	(let [loc (get-in state [:adventurer :location])
-		  name (get-in state [:adventurer :items item :name])
-		  state-drop-item (update-in state [:adventurer :inventory] dissoc item)
-		  state-put-item (assoc-in state [:map loc :contents] item)]
-		(vector state-put-item (str "Okay, you just dropped " name ". You can always come back it get it again."))))
+	(remove-from-inventory (drop-to-room state item) item)
+)
 
 (defn tick
 	"Add the tick by 1"
@@ -182,10 +247,8 @@
 )
 
 (def initial-env [
-	[:status] status
 	[:examine "@"] examine
-	[:can-move "@" "@"] can-move
-	[:go "@"] go
+	[:move "@"] move
 	[:take "@"] take
 	[:drop "@"] drop
 ])
@@ -257,7 +320,3 @@
 	"Main entry"
 	[]
 	(repl initial-env))
-
-(def a 1)
-
-(defn f [a] (+ a 1))
