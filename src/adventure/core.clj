@@ -375,7 +375,7 @@
 	:name		"Lake"
 	:desc		"You are paddling across the lake, wishing you had a sweet motor boat instead of this dingy raft keeping you afloat. The moonlight glistens off the\nmurky waters. The wind whispers 'General Kenobi, what a pleasure'. Cross the lake and go east or go north to the left path?"
 	:title	"You're back on the lake. The wind blows eastward and whispers in your ear 'General Kenobi, what a pleasure'. Cross the lake eastward or go north\n to the left path?"
-	:dir		{:north		:workshop
+	:dir		{:north		:left-path
 					 :east		:lower-level}	 
 	:contents	#{}
 })
@@ -439,7 +439,7 @@
 	[state input-vector]
 	(loop [idx 0]
 		(if (>= idx (count initial-env))
-			[state "INVALID"]
+			[state "Uh oh, that isn't a valid command. Try looking at the README.md file in our Github repository!"]
 			(if-let [vars (match (initial-env idx) input-vector)]
 				(apply (initial-env (inc idx)) state vars)
 				(recur (+ idx 2))))))
@@ -495,19 +495,22 @@
 					(let [canon-vec (canonicalize (read-line))]
 						(if (= (canon-vec 0) :quit) 
 							(println "Come back soon!")
-							(do
-								(doseq [item (filter string? (react state canon-vec))]
-									(println item))
-								(flush)
-								(if (and (= curr-loc :town) (contains? items :treasure))
-									nil
-									(do 
-										(print "\n> ")
-										(flush)
+							(if (<= hp 0)	
+								(println "GAMEOVER! It seems that you ran out of HP. I guess you just weren't destined to find the treasure...")
+								(do
+									(doseq [item (filter string? (react state canon-vec))]
+										(println item))
+									(flush)
+									(if (and (= curr-loc :town) (contains? items :treasure))
+										nil
+										(do 
+											(print "\n> ")
+											(flush)
+										)
 									)
-								)
-								(recur (first (react state canon-vec)))
-							)	
+									(recur (first (react state canon-vec)))
+								)	
+							)
 						)
 					)
 				)
