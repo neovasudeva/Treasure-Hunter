@@ -117,7 +117,7 @@
 											(str	"There appears to be nothing of significance in this room.")
 											(str "The room holds: " (clojure.string/join ", "(map #(name %) (:contents loc-actual))) ".") 
 										)
-			:hp						(str "You have " (get-in state [:adventurer :hp]) ".") 
+			:hp						(str "You have " (get-in state [:adventurer :hp]) " HP.") 
 			"Nani?"
 		)
 	)
@@ -279,7 +279,7 @@
 	:dir 		{:south :front-of-cave
 					 :east	:palace
 					 :west	:workshop}
-	:contents	#{:wood}
+	:contents	#{}
 })
 
 (def workshop {
@@ -307,7 +307,7 @@
 	:key			:front-of-cave
 	:name 		"Front of Cave"
 	:desc			"Bats fly out from what appears to be a dark cave. Looking around though, you do have several options: go south into the\nmain cave, go east to the left path, go west to the right path, or go north back to the town."
-	:title 		"You are again at the front of the main cave. A wind blows towards you and whispers 'well hello there' into your ear.\nLooking around though, you do have several options: go south into the main cave, go east to the left path, go west to a slightly to the right path\n, or go north back to the town."
+	:title 		"You are again at the front of the main cave. A wind blows towards you and whispers 'well hello there' into your ear.\nLooking around though, you do have several options: go south into the main cave, go east to the left path, go west to the right path,\nor go north back to the town."
 	:dir 		{:east 	:right-path
 					 :west 	:left-path
 			  	 :north	:town
@@ -344,7 +344,7 @@
 	:desc		"You peek into the well and there appears to be a key floating in the musty water. Should you pick it up or just leave that rusty old\nthing and head back north to the peak of the mountain?"
 	:title 	"You peek down the well and see the sunlight shine on top of the water. Something glistens in the reflections. Is it just the sunlight\nor perhaps an object? Go north to head back to the mountian peak."
 	:dir 		{:north		:mountains}
-	:contents	#{}
+	:contents	#{:key}
 })
 
 (def main-cave {
@@ -373,7 +373,7 @@
 	:type		:room
 	:key		:lake
 	:name		"Lake"
-	:desc		"You are paddling across the lake, wishing you had a sweet motor boat instead of this dingy raft keeping you afloat. The moonlight glistens off the\nmurky waters. Cross the lake and go east or go north to the left path?"
+	:desc		"You are paddling across the lake, wishing you had a sweet motor boat instead of this dingy raft keeping you afloat. The moonlight glistens off the\nmurky waters. The wind whispers 'General Kenobi, what a pleasure'. Cross the lake and go east or go north to the left path?"
 	:title	"You're back on the lake. The wind blows eastward and whispers in your ear 'General Kenobi, what a pleasure'. Cross the lake eastward or go north\n to the left path?"
 	:dir		{:north		:workshop
 					 :east		:lower-level}	 
@@ -391,7 +391,17 @@
 	:contents	#{}
 })
 
-
+(def lower-level {
+	:type		:room
+	:key		:lower-level
+	:name		"Lower Level"
+	;;
+	:desc		"You've reached the lower level of the cave. A gooey substance makes it hard to walk. You see a flash of light from the corner. Go west to cross the\nor north to the main cave."
+	:title		"Once again, the darkness of the cave's lower level engulfs you. You see a flash of light in the corner, it could be a crystal, or perhaps\nsomething different. Check it out or go east across the lake? Go north back to the main cave? Hmmm, decisions..."	
+	:dir		{:west		:lake
+				  :north		:main-cave}
+	:contents	#{:chest}
+})
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;
@@ -443,12 +453,18 @@
 		:hp					100
 	}
 	:map {
-		:town					town
-		:workshop			workshop
-		:lower-level	lower-level
-		:well					well
-		:lake					lake 
-		:palace				palace
+		:town						town
+		:workshop				workshop
+		:palace					palace
+		:front-of-cave	front-of-cave
+		:main-cave			main-cave
+		:upper-level		upper-level
+		:left-path			left-path
+		:lake						lake
+		:lower-level		lower-level
+		:right-path			right-path
+		:mountains			mountains
+		:well						well
 	}
 	:items #{
 		:banana
@@ -472,22 +488,33 @@
 	(do (print "\nWelcome to Treasure Hunter! You are a brave adventurer in search of a treasure. Not far to the\neast is the palace. Your job is to find the treasure and deliver it to the palace. Be weary\nadventurer, you only have limited energy. You start with 100 HP but each move to another room\nwill cost you 2 HP. Of course, you are carrying a banana that you can eat for an additional\n10 HP. That being said, search for the treasure in the surrounding rooms before you run out of\nHP. For a more detailed description of valid instructions, take a peek at the README.md file. Now, where will you go\nfirst? East to the palace? South to the front of the cave? Perhaps west to the workshop?\n> ") (flush)
 		(loop [state init-state]
 			(let [curr-loc (get-in state [:adventurer :location])
-				  items (get-in state [:adventurer :inventory])]
+				  items (get-in state [:adventurer :inventory])
+					hp (get-in state [:adventurer :hp])]
 				(if (and (= curr-loc :palace) (contains? items :treasure)) 
-						nil
-				   	(let [canon-vec (canonicalize (read-line))]
-							(if (= (canon-vec 0) :quit) 
-								(println "Come back soon!")
-								(do
-									(doseq [item (filter string? (react state canon-vec))]
-										(println item))
-									(flush)
-									(print "\n> ")
-									(flush)
-									(recur (first (react state canon-vec)))
-								)	
-							)
-			))))))
+					nil
+					(let [canon-vec (canonicalize (read-line))]
+						(if (= (canon-vec 0) :quit) 
+							(println "Come back soon!")
+							(do
+								(doseq [item (filter string? (react state canon-vec))]
+									(println item))
+								(flush)
+								(if (and (= curr-loc :town) (contains? items :treasure))
+									nil
+									(do 
+										(print "\n> ")
+										(flush)
+									)
+								)
+								(recur (first (react state canon-vec)))
+							)	
+						)
+					)
+				)
+			)
+		)
+	)
+)
 
 (defn main
 	"Main entry"
