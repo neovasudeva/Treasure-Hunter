@@ -1,13 +1,16 @@
-GROUP MEMBERS:  
-                neov2 ;
-                chenfei5 ;
-                yimingy5 ;
+# Final Project - CS 296 - Treasure Hunter
+Hello! This repo contains our CS296 final project. It is a text-based game called "Treasure Hunter." More details are below.
 
-Here are some instructions to play the game:
-        You are a adventurer who need to find the treasure, which is kept in a chest, and bring it back to palace;
-        You don't have much time left, you have to finish the task in 50 moves;
-        you may increase the step limitation by having some food;
+### Group Members
+neov2, chenfei5, yimingy5 
 
+### Instructions
+**Goal of the Game**
+You are an adventurer who needs to find the treasure to save the kingdom. Embark on your journey around the map in search for treasure,
+which is hidden in a chest, and return it to the palace. Be wary though, you can only make 50 moves before you perish. You can, however,
+extend your life by eating food. 
+
+**Legend of Valid Commands**
         GENERAL:
         To check the room, type in: examine room
         To check the items with you, type in: examine inventory
@@ -41,18 +44,22 @@ Here are some instructions to play the game:
                                         |
                                         |
         LEFT_PATH-----------------FRONT_OF_CAVE--------------------RIGHT_PATH
-            |                           |                               |
-            |                           |                               |
-            |                           |                               |
-            |                           |                               |
-            |    UPPER_LEVEL---------MAIN_CAVE                      MOUNTAINS
-            |        (WOODS)            |                               |
-            |                           |                               |
-            |                           |                               |
-            |                           |                               |
+            ~                           |                               |
+            ~                           |                               |
+            ~                           |                               |
+            ~                           |                               |
+            ~    UPPER_LEVEL---------MAIN_CAVE                      MOUNTAINS
+            ~        (WOOD)             |                               |
+            ~                           |                               |
+            ~                           |                               |
+            ~                           |                               |
            LAKE~~~~~~Water~Road~~~~~LOWER_LEVEL                       WEllS
-           (NEED BOATS to enter and leave)                            (KEY)                               
+           (NEED BOATS to enter and leave)                                                          
 
+**For those who are speed-running the game**
+For those that wish to simply see the game and action, run the following commands in REPL to beat the game. To win, you must find the chest and key, take them into your inventory
+and use the key to open the chest. Then, once the treasure is secure in your inventory, run to the palace to win. The following is a set of instructions to enter in order to beat the
+game swiftly. In this speed-run, we use wood we found to create a boat and cross the lake.
            For test:
            Here is the steps how you can easily win:
                 1.move south
