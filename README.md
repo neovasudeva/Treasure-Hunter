@@ -1,7 +1,7 @@
 GROUP MEMBERS:  
                 neov2 ;
                 chenfei5 ;
-                yiming5 ;
+                yimingy5 ;
 
 Here are some instructions to play the game:
         You are a adventurer who need to find the treasure, which is kept in a chest, and bring it back to palace;
