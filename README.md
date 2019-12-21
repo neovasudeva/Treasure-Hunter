@@ -5,12 +5,12 @@ Hello! This repo contains our CS296 final project. It is a text-based game calle
 neov2, chenfei5, yimingy5 
 
 ### Instructions
-**Goal of the Game**
+**Goal of the Game**<br>
 You are an adventurer who needs to find the treasure to save the kingdom. Embark on your journey around the map in search for treasure,
 which is hidden in a chest, and return it to the palace. Be wary though, you can only make 50 moves before you perish. You can, however,
 extend your life by eating food. 
 
-**Legend of Valid Commands**
+**Legend of Valid Commands**<br>
         GENERAL:
         To check the room, type in: examine room
         To check the items with you, type in: examine inventory
@@ -56,10 +56,11 @@ extend your life by eating food.
            LAKE~~~~~~Water~Road~~~~~LOWER_LEVEL                       WEllS
            (NEED BOATS to enter and leave)                                                          
 
-**For those who are speed-running the game**
+**For those who are speed-running the game** <br>
 For those that wish to simply see the game and action, run the following commands in REPL to beat the game. To win, you must find the chest and key, take them into your inventory
 and use the key to open the chest. Then, once the treasure is secure in your inventory, run to the palace to win. The following is a set of instructions to enter in order to beat the
 game swiftly. In this speed-run, we use wood we found to create a boat and cross the lake.
+
            For test:
            Here is the steps how you can easily win:
                 1.move south
