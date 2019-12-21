@@ -11,6 +11,7 @@ which is hidden in a chest, and return it to the palace. Be wary though, you can
 extend your life by eating food. 
 
 **Legend of Valid Commands**<br>
+
         GENERAL:
         To check the room, type in: examine room
         To check the items with you, type in: examine inventory
