@@ -58,9 +58,9 @@ extend your life by eating food.
            (NEED BOATS to enter and leave)                                                          
 
 **For those who are speed-running the game** <br>
-For those that wish to simply see the game and action, run the following commands in REPL to beat the game. To win, you must find the chest and key, take them into your inventory
+For those that wish to simply see the game in action, run the following commands in REPL to beat the game. To win, you must find the chest and key, take them into your inventory
 and use the key to open the chest. Then, once the treasure is secure in your inventory, run to the palace to win. The following is a set of instructions to enter in order to beat the
-game swiftly. In this speed-run, we use wood we found to create a boat and cross the lake.
+game swiftly. In this speed-run, we use wood we found to create a boat and cross the lake, but that step is not necessary to beat the game.
 
            For test:
            Here is the steps how you can easily win:
