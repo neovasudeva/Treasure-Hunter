@@ -385,9 +385,9 @@
 	:key		:left-path
 	:name		"Left Path"
 	:desc		"You enter a long winding path. At the end, you see a lake to the south. Continue south or go east to the front of the cave?"
-	:title	"You're back at the left path with a lake to the south. You notice Travel to the lake or go east to the front of the cave?"
+	:title	"You're back at the left path with a lake to the south. Travel to the lake or go east to the front of the cave?"
 	:dir		{:east		:front-of-cave	
-				 :south		:lake}		
+					 :south		:lake}		
 	:contents	#{}
 })
 
