@@ -147,7 +147,7 @@
 ;; PURPOSE
 ;; allows the player to take an item from the room
 ;; returns [new state, string indicating player took object]
-(defn take
+(defn take-game
 	"Take an item from a place"
 	[state item]
 	(let [room-key (get-in state [:adventurer :location])
@@ -228,7 +228,7 @@
 ;; PURPOSE
 ;; allow player to drop item into a room
 ;; returns [new state, string indicating the drop]
-(defn drop
+(defn drop-game
 	"Drop an item from your inventory. Maybe you need it no more or it's too heavy to carry"
 	[state item]
 	[(remove-from-inventory (drop-to-room state item) item) (str "You dropped the " (name item) ".")]
@@ -239,7 +239,7 @@
 ;; PURPOSE
 ;; allows the player to "use" an item in their inventory
 ;; returns [new state, string indicating successful use]
-(defn use
+(defn use-game
 	"Use an item from inventory"
 	[state item]
 	(let [inventory (get-in state [:adventurer :inventory])
@@ -252,14 +252,16 @@
 									[(add-to-inventory (remove-from-inventory state :chest) :treasure) "You opened the chest and found the treasure!"]
 								(contains? inventory :treasure)
 									[state "Looks like you already have the treasure ... Hurry and make your way to the PALACE!"]
-								:else [state "Hmmm ... you have the key but what does it open?"]
+								(contains? inventory :key)
+									[state "Hmmm ... you have a key but what does it open?"]
+								:else [state "You don't have that in your inventory."]
 							)
 			:wood		(if (= room :workshop)
 								[(add-to-inventory (remove-from-inventory state :wood) :boat) "Your wood was transformed into a boat! You can now travel over bodies of water!"]
 								[state "You pull out the wood but can't seem to find a use for it ..."]
 							)
 			; default
-			[state "You don't have that your inventory."]
+			[state "You don't have that in your inventory."]
 		)
 	)
 )
@@ -396,7 +398,7 @@
 	:key		:lower-level
 	:name		"Lower Level"
 	;;
-	:desc		"You've reached the lower level of the cave. A gooey substance makes it hard to walk. You see a flash of light from the corner. Go west to cross the\nor north to the main cave."
+	:desc		"You've reached the lower level of the cave. A gooey substance makes it hard to walk. You see a flash of light from the corner. Go west to cross the lake\nor north to the main cave."
 	:title		"Once again, the darkness of the cave's lower level engulfs you. You see a flash of light in the corner, it could be a crystal, or perhaps\nsomething different. Check it out or go east across the lake? Go north back to the main cave? Hmmm, decisions..."	
 	:dir		{:west		:lake
 				  :north		:main-cave}
@@ -430,9 +432,9 @@
 (def initial-env [
 	[:examine "@"] examine
 	[:move "@"] move
-	[:take "@"] take
-	[:drop "@"] drop
-	[:use "@"] use
+	[:take "@"] take-game
+	[:drop "@"] drop-game
+	[:use "@"] use-game
 ])
 
 (defn react
@@ -485,7 +487,7 @@
 (defn repl
 	"Start a REPL"
 	[env]
-	(do (print "\nWelcome to Treasure Hunter! You are a brave adventurer in search of a treasure. Not far to the\neast is the palace. Your job is to find the treasure and deliver it to the palace. Be weary\nadventurer, you only have limited energy. You start with 100 HP but each move to another room\nwill cost you 2 HP. Of course, you are carrying a banana that you can eat for an additional\n10 HP. That being said, search for the treasure in the surrounding rooms before you run out of\nHP. For a more detailed description of valid instructions, take a peek at the README.md file. Now, where will you go\nfirst? East to the palace? South to the front of the cave? Perhaps west to the workshop?\n> ") (flush)
+	(do (print "Welcome to Treasure Hunter! You are a brave adventurer in search of a treasure. Not far to the\neast is the palace. Your job is to find the treasure and deliver it to the palace. Be weary\nadventurer, you only have limited energy. You start with 100 HP but each move to another room\nwill cost you 2 HP. Of course, you are carrying a banana that you can eat for an additional\n10 HP. That being said, search for the treasure in the surrounding rooms before you run out of\nHP. For a more detailed description of valid instructions, take a peek at the README.md file. Now, where will you go\nfirst? East to the palace? South to the front of the cave? Perhaps west to the workshop?\n> ") (flush)
 		(loop [state init-state]
 			(let [curr-loc (get-in state [:adventurer :location])
 				  items (get-in state [:adventurer :inventory])
