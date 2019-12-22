@@ -1,5 +1,6 @@
 # Final Project - CS 296 - Treasure Hunter
 Hello! This repo contains our CS296 final project. It is a text-based game called "Treasure Hunter" written in Clojure. More details are below.
+We hope you like the game (and our subtle Star Wars references)!
 
 ### Group Members
 neov2, chenfei5, yimingy5 
